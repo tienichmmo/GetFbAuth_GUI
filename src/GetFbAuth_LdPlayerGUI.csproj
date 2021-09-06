@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>D:\Projects VS 2\LinhTinh\GetFbAuth_LdPlayer_full_permission\GetFbAuth_LdPlayerGUI\bin\Debug\netcoreapp3.1\images\AppIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentUI.Core" Version="1.0.49" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,92 @@
+﻿<fluentui:FabricWindow x:Class="GetFbAuth_LdPlayerGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GetFbAuth_LdPlayerGUI"
+        xmlns:fluentui="clr-namespace:FluentUI;assembly=FluentUI"
+        mc:Ignorable="d"
+        Title="GetFbAuth_LdPlayerGUI v1.0.0 | Freeware | tienichmmo.net"
+        Style="{DynamicResource CustomWindowStyle}"
+        WindowStartupLocation="CenterScreen" Width="839" Height="500" Activated="FabricWindow_Activated">
+    <Window.Resources>
+        <Style TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+    </Window.Resources>
+    <TabControl TabStripPlacement="Left">
+        <TabItem Header="Main" >
+            <DockPanel>
+            <ScrollViewer>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical" x:Name="panelListview">
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <Border x:Name="DevicesCountBd" Margin="10" Background="{StaticResource Neutral.White}" BorderThickness="1" HorizontalAlignment="Left" Padding="10" Effect="{StaticResource Depth64}">
+                                    <TextBlock x:Name="lbDevicesCount" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Devices 0" Foreground="{StaticResource Neutral.Gray130}"/>
+                            </Border>
+                            <Border Margin="10" Background="{StaticResource Neutral.White}" BorderThickness="1" HorizontalAlignment="Left" Padding="10" Effect="{StaticResource Depth64}">
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Fb App Type" Foreground="{StaticResource Neutral.Gray130}"/>
+                            </Border>
+                            <ComboBox Name="cbbFbAppType" Height="40" Width="100" SelectionChanged="cbbFbAppType_SelectionChanged">
+                                <ComboBoxItem Content="Fb"/>
+                                <ComboBoxItem Content="Fb lite"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <DockPanel>
+                            <Border Margin="10">
+                                <DataGrid x:Name="dataGrid" 
+                              AutoGenerateColumns="False" IsReadOnly="True" Height="265">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="#" Binding="{Binding NumberRow}" IsReadOnly="False"/>
+                                        <DataGridTextColumn Header="Device" Binding="{Binding DeviceId}" IsReadOnly="False"/>
+                                        <DataGridTextColumn Header="Fb id" Binding="{Binding Fbid}" IsReadOnly="False"/>
+                                        <DataGridTextColumn Header="Fb Token" Binding="{Binding FbToken}" IsReadOnly="False"/>
+                                        <DataGridTextColumn Header="Fb Cookie" Binding="{Binding FbCookie}" IsReadOnly="False"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Border>
+                        </DockPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="btnreset" Content="Refresh Devices" HorizontalAlignment="Left" Margin="10" Click="btnreset_Click" Style="{StaticResource FabricPrimaryButtonStyle}">
+
+                        </Button>
+                        <Button x:Name="btnviewResult" Content="View Result" HorizontalAlignment="Left" Margin="10" Click="btnviewResult_Click">
+
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+                
+            </ScrollViewer>
+            </DockPanel>
+        </TabItem>
+        <TabItem Header="About">
+            <DockPanel HorizontalAlignment="Center">
+                <ScrollViewer>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="./Images/Facebook-icon.png" Margin="10" Width="50" x:Name="imgLogo">
+
+                            </Image>
+                            <TextBlock Margin="10" FontFamily="Segoe UI" FontSize="15">
+                                GetFbAuth_LdPlayerGUI v1.0.0 <LineBreak></LineBreak>
+                                @2021 By Nguyen Dac Tai From <Run Text="Tienichmmo.net " Foreground="Red"/>
+                                <LineBreak></LineBreak>
+                                With <Run Text="Love " Foreground="Red"/>
+                            </TextBlock>
+
+                        </StackPanel>
+                        <Border Margin="150,10" Background="{StaticResource Neutral.White}" BorderThickness="1" HorizontalAlignment="Left" Padding="10" Effect="{StaticResource Depth64}">
+                            <Button x:Name="btnGit" Content="Source Code On Github" HorizontalAlignment="Left" BorderThickness="0" Click="btnGit_Click">
+                            </Button>
+                        </Border>
+                       
+                    </StackPanel>
+
+                </ScrollViewer>
+            </DockPanel>
+            
+        </TabItem>
+    </TabControl>
+</fluentui:FabricWindow>
