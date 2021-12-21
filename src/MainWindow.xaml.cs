@@ -1,4 +1,4 @@
-﻿using FluentUI;
+using FluentUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +24,7 @@ namespace GetFbAuth_LdPlayerGUI
     /// </summary>
     public partial class MainWindow : FabricWindow
     {
+        #region Property
         public List<string> Devices = new List<string>();
         public Enums.FbAuthEnum.FBAppTypes FBAppType {  get; set; }
         private const string notfoundFb = "not found fb";
@@ -39,10 +40,13 @@ namespace GetFbAuth_LdPlayerGUI
                 NumberRow = row
             };
         }
+        #endregion
         public MainWindow()
         {
             InitializeComponent();
+            this.Background = new SolidColorBrush(Color.FromRgb(32, 32, 32));
         }
+        #region UI Execute
         private void btnreset_Click(object sender, RoutedEventArgs e)
         {
             Devices = AdbServices.GetListDevices();
@@ -62,7 +66,7 @@ namespace GetFbAuth_LdPlayerGUI
                     NumberRow = row+=1,
                     DeviceId = device
                 };
-                string _SessionFile = $"sess\\{Utilities.RandomStr(7) + ".sess"}";
+                string _SessionFile = $"sess\\{Utilities.RandomStr(7) + ".txt"}";
                 string _CmdCommandGetAuth = AdbServices.CmdQuery(device, FBAppType) + $" {_SessionFile}";
                 AdbServices.ExecuteCMD(_CmdCommandGetAuth);
                 if (File.Exists(_SessionFile))
@@ -90,6 +94,8 @@ namespace GetFbAuth_LdPlayerGUI
             }   
                 
         }
+        #endregion
+        #region Methods
         private void DeleteFile(string filename)
         {
             try
@@ -98,18 +104,24 @@ namespace GetFbAuth_LdPlayerGUI
             }
             catch { }
         }
+        #endregion
+
         private void cbbFbAppType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             FBAppType = cbbFbAppType.SelectedIndex == 0 ? Enums.FbAuthEnum.FBAppTypes.Fb
                 : Enums.FbAuthEnum.FBAppTypes.FbLite;
         }
-
+        private void cbbadbType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AdbServices.Adb = cbbadbType.SelectedIndex == 0 ? Enums.FbAuthEnum.AdbTypes.Normal : Enums.FbAuthEnum.AdbTypes.Nox;
+        }
         private void FabricWindow_Activated(object sender, EventArgs e)
         {
             cbbFbAppType.SelectedIndex = 0;
             Uri fileUri = new Uri(AppDomain.CurrentDomain.BaseDirectory + "/images/AppIcon.ico");
             imgLogo.Source = new BitmapImage(fileUri);
             this.Icon = new BitmapImage(fileUri);
+            cbbadbType.SelectedIndex = 0;
         }
 
         private void btnGit_Click(object sender, RoutedEventArgs e)

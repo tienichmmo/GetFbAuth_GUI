@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -12,10 +12,19 @@ namespace GetFbAuth_LdPlayerGUI
     {
         public const string FbPath = "/data/data/com.facebook.katana/app_light_prefs/com.facebook.katana/authentication";
         public const string FbLitePath = "/data/data/com.facebook.lite/files/PropertiesStore_v02";
+        public static FbAuthEnum.AdbTypes Adb {  get; set; }
+        public static string AdbTerminal
+        {
+            get
+            {
+                return Adb == FbAuthEnum.AdbTypes.Normal ? "adb " : "nox_adb ";
+            }
+        }
         public static List<string> GetListDevices()
         {
             List<string> list = new List<string>();
-            string input = ExecuteCMD("adb devices");
+            //string input = ExecuteCMD("adb devices");
+            string input = ExecuteCMD($"{AdbTerminal} devices");
             if (!string.IsNullOrEmpty(input))
             {
                 string pattern = "(?<=List of devices attached)([^\\n]*\\n+)+";
@@ -68,8 +77,8 @@ namespace GetFbAuth_LdPlayerGUI
         }
         public static string CmdQuery(string DeviceId, FbAuthEnum.FBAppTypes fBAppTypes)
         {
-            return fBAppTypes == FbAuthEnum.FBAppTypes.Fb ? $"adb -s {DeviceId} root && adb -s {DeviceId} pull {FbPath}"
-                : $"adb -s {DeviceId} root && adb -s {DeviceId} pull {FbLitePath}";
+            return fBAppTypes == FbAuthEnum.FBAppTypes.Fb ? $"{AdbTerminal} -s {DeviceId} root && {AdbTerminal} -s {DeviceId} pull {FbPath}"
+                : $"{AdbTerminal} -s {DeviceId} root && adb -s {DeviceId} pull {FbLitePath}";
         }
     }
 }
