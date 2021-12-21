@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using GetFbAuth_LdPlayerGUI.Enums;
+using Newtonsoft.Json.Linq;
+using static System.Net.WebUtility;
 
 namespace GetFbAuth_LdPlayerGUI.Models
 {
@@ -33,7 +35,7 @@ namespace GetFbAuth_LdPlayerGUI.Models
                 {
                     InitFbLite();
                 }
-                return ($"datr={System.Net.WebUtility.UrlEncode(datr)}; c_user={uid}; xs={System.Net.WebUtility.UrlEncode(xs)}; fr={System.Net.WebUtility.UrlEncode(fr)};");
+                return ($"datr={UrlEncode(datr)}; c_user={uid}; xs={UrlEncode(xs)}; fr={UrlEncode(fr)};");
             }
         }
         private void initFb()
@@ -46,11 +48,33 @@ namespace GetFbAuth_LdPlayerGUI.Models
         }
         private void InitFbLite()
         {
-            Token = "EAA" + Regex.Match(rawText, "EAA(.*?)\",").Groups[1].Value;
-            uid = Regex.Match(rawText, "uid\":\"(\\d+)\",").Groups[1].Value;
-            xs = Utilities.GetNodeStringByName(rawText, "name\":\"xs\"(.*?)\"value\":\"(.*?)\"", 2);
-            fr = Utilities.GetNodeStringByName(rawText, "name\":\"fr\"(.*?)\"value\":\"(.*?)\"", 2);
-            datr = Utilities.GetNodeStringByName(rawText, "name\":\"datr\"(.*?)\"value\":\"(.*?)\"", 2);
+            #region OldMethod
+            //Token = "EAA" + Regex.Match(rawText, "EAA(.*?)\",").Groups[1].Value;
+            //uid = Regex.Match(rawText, "uid\":\"(\\d+)\",").Groups[1].Value;
+            //xs = Utilities.GetNodeStringByName(rawText, "name\":\"xs\"(.*?)\"value\":\"(.*?)\"", 2);
+            //fr = Utilities.GetNodeStringByName(rawText, "name\":\"fr\"(.*?)\"value\":\"(.*?)\"", 2);
+            //datr = Utilities.GetNodeStringByName(rawText, "name\":\"datr\"(.*?)\"value\":\"(.*?)\"", 2);
+            //Token = "EAA" + Regex.Match(rawText, "EAA(.*?)\",").Groups[1].Value;
+            #endregion
+            string center_json = Regex.Match(rawText, "\\[{\"expires\":(.*?}\\])").Groups[1].Value;
+            string first_json = "[{\"expires\":" + center_json;
+            JArray jArray = JArray.Parse(first_json);
+            List<FbAuthJson> auth = Newtonsoft.Json.JsonConvert.DeserializeObject<List<FbAuthJson>>(jArray.ToString());
+            Token = "EAA" + Regex.Match(rawText, "EAA(.*?)\\|").Groups[1].Value;
+            xs = auth.Find(x => x.name == "xs").value;
+            fr = auth.Find(x => x.name == "fr").value;
+            datr = auth.Find(x => x.name == "datr").value;
+            uid = auth.Find(x => x.name == "c_user").value;
+        }
+        private class FbAuthJson
+        {
+            public string expires { get; set; }
+            public string path { get; set; }
+            public string is_secure { get; set; }
+            public string domain { get; set; }
+            public string value { get; set; }
+            public string name { get; set; }
+            public string expires_timestamp { get; set; }
         }
     }
 }
