@@ -1,4 +1,4 @@
-# GetFbAuth_LdPlayer!
+# GetFbAuth_GUI!
 ![image](https://user-images.githubusercontent.com/44217992/132187054-f5390eaf-c737-4087-a261-f872a202b293.png)
 Get fb token &amp; cookie from Ld Player using Adb
 
